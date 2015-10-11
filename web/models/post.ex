@@ -22,4 +22,11 @@ defmodule Blog.Post do
     model
     |> cast(params, @required_fields, @optional_fields)
   end
+
+  def count_comments(query) do
+    from p in query,
+      group_by: p.id,
+      left_join: c in assoc(p, :comments),
+      select: {p, count(c.id)}
+  end
 end
